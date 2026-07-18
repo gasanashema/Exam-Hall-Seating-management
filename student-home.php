@@ -145,6 +145,18 @@ $incomingExamsSql = "SELECT sa.exam_name, sa.exam_date,sa.id, sa.start_time, sa.
                      AND FIND_IN_SET('{$currentStudentInfo['session']}', sa.sessions)";
 
 $incomingExamsResult = $conn->query($incomingExamsSql);
+
+// Pre-fetch all booked seats for the current student to avoid N+1 queries in the loop
+$student_seats = [];
+if (isset($_SESSION['student_id'])) {
+    $student_id = $_SESSION['student_id'];
+    $student_seats_query = $conn->query("SELECT seating_arrangement_id, set_number FROM seats WHERE student_id = '$student_id'");
+    if ($student_seats_query) {
+        while ($s_row = $student_seats_query->fetch_assoc()) {
+            $student_seats[$s_row['seating_arrangement_id']] = $s_row['set_number'];
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -236,10 +248,9 @@ $incomingExamsResult = $conn->query($incomingExamsSql);
                                 <p class='card-text'>Date: {$examRow['exam_date']}</p>
                                 <p class='card-text'>Time: {$examRow['start_time']} - {$examRow['end_time']}</p>
                                 ";
-                                $set_number = mysqli_query($conn,"SELECT set_number from seats where student_id='$_SESSION[student_id]' AND seating_arrangement_id='$examRow[id]' LIMIT 1");
-                                $set_number_found = mysqli_fetch_assoc($set_number);
-                                if ($set_number_found != Null) {
-                                   echo "<p class='card-text'>Your Seat: {$set_number_found['set_number']}</p>";
+                                $set_number_found = isset($student_seats[$examRow['id']]) ? $student_seats[$examRow['id']] : null;
+                                if ($set_number_found !== null) {
+                                   echo "<p class='card-text'>Your Seat: {$set_number_found}</p>";
                                 }
                                 ?>
 

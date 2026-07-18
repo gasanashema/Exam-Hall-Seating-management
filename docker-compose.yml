@@ -1,0 +1,42 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: examhall_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: examhall
+      MYSQL_USER: phpmyadmin
+      MYSQL_PASSWORD: disaster
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - "./database/examhall.sql:/docker-entrypoint-initdb.d/init.sql"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: examhall_web
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=phpmyadmin
+      - DB_PASSWORD=disaster
+      - DB_NAME=examhall
+      - DB_PORT=3306
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:

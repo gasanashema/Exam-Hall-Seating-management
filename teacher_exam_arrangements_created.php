@@ -16,6 +16,18 @@ $sql = "SELECT sa.id, sa.created_at,sa.year, sa.exam_name, sa.exam_date, sa.star
         LEFT JOIN teachers t ON sa.teacher_id = t.id
         LEFT JOIN departments d ON sa.department_id = d.id WHERE sa.teacher_id='$_SESSION[teacher_id]'";
 $result = $conn->query($sql);
+
+// Pre-fetch all seats with student details to avoid N+1 queries in the loop
+$all_seats = [];
+$seats_sql = "SELECT s.*, st.reg_no, st.name FROM seats s INNER JOIN students st ON s.student_id = st.id ORDER BY s.set_number ASC";
+$seats_result = $conn->query($seats_sql);
+if ($seats_result) {
+    while ($seat = $seats_result->fetch_assoc()) {
+        $sa_id = $seat['seating_arrangement_id'];
+        $col = substr($seat['set_number'], 0, 1); // 'L', 'M', or 'R'
+        $all_seats[$sa_id][$col][] = $seat;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -130,13 +142,13 @@ $result = $conn->query($sql);
                         echo "<td>
                                ";
                 ?>
-                        <button data-toggle="modal" data-target="#editStudentModal" class="btn btn-success">View Sitting Plan</button>
+                        <button data-toggle="modal" data-target="#editStudentModal<?php echo $row['id']; ?>" class="btn btn-success">View Sitting Plan</button>
                         <!-- Edit Student Modal -->
-                        <div class="modal fade col-lg-12" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+                        <div class="modal fade col-lg-12" id="editStudentModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editStudentModalLabel">Edit Your account info</h5>
+                                        <h5 class="modal-title" id="editStudentModalLabel">View Seating Plan</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -148,84 +160,59 @@ $result = $conn->query($sql);
                                                 <div class='card-body'>
                                                     <h5 class='card-title'>Left Column</h5>
 
-                                                    <?php
-                                                    // Assuming $row['id'] is already fetched and safe to use
-                                                    $seatingArrangementId = mysqli_real_escape_string($conn, $row['id']);
-                                                    $sql = "SELECT * FROM seats INNER JOIN students ON seats.student_id = students.id WHERE seating_arrangement_id = '$seatingArrangementId' AND set_number LIKE 'L%' ORDER BY set_number ASC";
-
-                                                    $result_data = mysqli_query($conn, $sql);
-                                                    if ($result_data) {
-                                                        $k = 1;
-                                                        while ($students = mysqli_fetch_assoc($result_data)) {
-                                                    ?>
-                                                            <p class='card-text'><?php echo $k++ . ". " . htmlspecialchars($students['reg_no']) . " " . $students['name'] . " (" . $students['set_number'] . ")"; ?></p>
-                                                    <?php
-                                                        }
-                                                    } else {
-                                                        echo "Error: " . mysqli_error($conn);
-                                                    }
-                                                    ?>
+                                                     <?php
+                                                     $students_list = isset($all_seats[$row['id']]['L']) ? $all_seats[$row['id']]['L'] : [];
+                                                     $k = 1;
+                                                     foreach ($students_list as $students) {
+                                                     ?>
+                                                             <p class='card-text'><?php echo $k++ . ". " . htmlspecialchars($students['reg_no']) . " " . $students['name'] . " (" . $students['set_number'] . ")"; ?></p>
+                                                     <?php
+                                                     }
+                                                     ?>
 
 
 
-                                                </div>
-                                            </div>
+                                                 </div>
+                                             </div>
 
-                                            <!-- card-->
-                                            <div class='card col-md-4'>
-                                                <div class='card-body'>
-                                                    <h5 class='card-title'>Middle Column</h5>
-                                                    <?php
-                                                    // Assuming $row['id'] is already fetched and safe to use
-                                                    $seatingArrangementId = mysqli_real_escape_string($conn, $row['id']);
-                                                    $sql = "SELECT * FROM seats INNER JOIN students ON seats.student_id = students.id WHERE seating_arrangement_id = '$seatingArrangementId' AND set_number LIKE 'M%' ORDER BY set_number ASC";
-
-                                                    $result_data = mysqli_query($conn, $sql);
-                                                    if ($result_data) {
-                                                        $k = 1;
-                                                        while ($students = mysqli_fetch_assoc($result_data)) {
-                                                    ?>
-                                                            <p class='card-text'><?php echo $k++ . ". " . htmlspecialchars($students['reg_no']) . " " . $students['name'] . " (" . $students['set_number'] . ")"; ?></p>
-                                                    <?php
-                                                        }
-                                                    } else {
-                                                        echo "Error: " . mysqli_error($conn);
-                                                    }
-                                                    ?>
+                                             <!-- card-->
+                                             <div class='card col-md-4'>
+                                                 <div class='card-body'>
+                                                     <h5 class='card-title'>Middle Column</h5>
+                                                     <?php
+                                                     $students_list = isset($all_seats[$row['id']]['M']) ? $all_seats[$row['id']]['M'] : [];
+                                                     $k = 1;
+                                                     foreach ($students_list as $students) {
+                                                     ?>
+                                                             <p class='card-text'><?php echo $k++ . ". " . htmlspecialchars($students['reg_no']) . " " . $students['name'] . " (" . $students['set_number'] . ")"; ?></p>
+                                                     <?php
+                                                     }
+                                                     ?>
 
 
 
 
-                                                </div>
-                                            </div>
+                                                 </div>
+                                             </div>
 
-                                            <!-- card-->
-                                            <div class='card col-md-4'>
-                                                <div class='card-body'>
-                                                    <h5 class='card-title'>Right Column</h5>
-                                                    <?php
-                                                    // Assuming $row['id'] is already fetched and safe to use
-                                                    $seatingArrangementId = mysqli_real_escape_string($conn, $row['id']);
-                                                    $sql = "SELECT * FROM seats INNER JOIN students ON seats.student_id = students.id WHERE seating_arrangement_id = '$seatingArrangementId' AND set_number LIKE 'R%' ORDER BY set_number ASC";
-
-                                                    $result_data = mysqli_query($conn, $sql);
-                                                    if ($result_data) {
-                                                        $k = 1;
-                                                        while ($students = mysqli_fetch_assoc($result_data)) {
-                                                    ?>
-                                                            <p class='card-text'><?php echo $k++ . ". " . htmlspecialchars($students['reg_no']) . " " . $students['name'] . " (" . $students['set_number'] . ")"; ?></p>
-                                                    <?php
-                                                        }
-                                                    } else {
-                                                        echo "Error: " . mysqli_error($conn);
-                                                    }
-                                                    ?>
+                                             <!-- card-->
+                                             <div class='card col-md-4'>
+                                                 <div class='card-body'>
+                                                     <h5 class='card-title'>Right Column</h5>
+                                                     <?php
+                                                     $students_list = isset($all_seats[$row['id']]['R']) ? $all_seats[$row['id']]['R'] : [];
+                                                     $k = 1;
+                                                     foreach ($students_list as $students) {
+                                                     ?>
+                                                             <p class='card-text'><?php echo $k++ . ". " . htmlspecialchars($students['reg_no']) . " " . $students['name'] . " (" . $students['set_number'] . ")"; ?></p>
+                                                     <?php
+                                                     }
+                                                     ?>
 
 
 
-
-                                                </div>
-                                            </div>
+                                                 </div>
+                                             </div></div>
                                         </div>
 
 
