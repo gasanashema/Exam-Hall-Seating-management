@@ -1,0 +1,331 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-glow: rgba(79, 70, 229, 0.25);
+    --secondary: #06b6d4;
+    --secondary-hover: #0891b2;
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: rgba(226, 232, 240, 0.8);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+/* Global Font Overrides */
+body {
+    font-family: 'Outfit', 'Inter', sans-serif !important;
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700 !important;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+}
+
+/* Authentication Layout (Radial Dark Background) */
+.auth-body {
+    background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #030712 100%) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: #f8fafc !important;
+}
+
+/* Custom Navigation Bar */
+.navbar {
+    background: rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    padding: 0.85rem 0 !important;
+}
+
+.navbar-brand {
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
+    color: #ffffff !important;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand::before {
+    content: "🎓";
+    margin-right: 8px;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #94a3b8 !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 2px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: var(--radius-sm);
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.navbar-nav .nav-link.text-primary {
+    color: var(--secondary) !important;
+}
+
+.navbar-nav .nav-link.text-danger {
+    color: #f43f5e !important;
+}
+
+/* Authentication Cards (Glassmorphism) */
+.auth-container {
+    margin-top: 80px !important;
+    margin-bottom: 80px !important;
+}
+
+.auth-card {
+    background: rgba(15, 23, 42, 0.55) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+    padding: 2.5rem !important;
+    transition: transform 0.3s ease;
+}
+
+.auth-card .card-header {
+    background: transparent !important;
+    border-bottom: none !important;
+    color: #ffffff !important;
+    padding-bottom: 1.5rem !important;
+}
+
+.auth-card .card-header h2 {
+    color: #ffffff !important;
+    font-size: 1.85rem;
+    font-weight: 800 !important;
+}
+
+.auth-card .form-group label {
+    color: #94a3b8;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Modern Form Controls */
+.auth-body .form-control {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc !important;
+}
+
+.auth-body .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px var(--primary-glow) !important;
+}
+
+.form-control {
+    border-radius: var(--radius-md) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.95rem !important;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+select.form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    appearance: none;
+}
+
+.auth-body select.form-control option {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+/* Generic Styled Dashboard Layout */
+.container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+/* White Elevated Cards */
+.card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    font-weight: 700;
+}
+
+/* Custom Buttons styling */
+.btn {
+    border-radius: var(--radius-md) !important;
+    font-weight: 600 !important;
+    padding: 0.65rem 1.25rem !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-size: 0.95rem !important;
+}
+
+.btn-primary {
+    background-color: var(--primary) !important;
+    border: none !important;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3) !important;
+}
+
+.btn-success {
+    background-color: var(--success) !important;
+    border: none !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2) !important;
+}
+
+.btn-success:hover {
+    background-color: #059669 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3) !important;
+}
+
+.btn-danger {
+    background-color: var(--danger) !important;
+    border: none !important;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626 !important;
+    transform: translateY(-1px);
+}
+
+/* Modern Tables styling */
+.table-responsive {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+    margin-bottom: 0 !important;
+}
+
+.table th {
+    background-color: #f8fafc !important;
+    border-bottom: 2px solid var(--border-color) !important;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.25rem !important;
+}
+
+.table td {
+    padding: 1.1rem 1.25rem !important;
+    vertical-align: middle !important;
+    border-top: 1px solid var(--border-color) !important;
+    font-size: 0.95rem;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Custom Status Badges */
+.badge {
+    padding: 0.35em 0.65em !important;
+    font-size: 0.75em !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+}
+
+/* Layout Utilities */
+.page-title {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+/* Custom Seating Plan Design Grid */
+.plan-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.column-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+}
+
+.column-card h5 {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.student-seat-item {
+    padding: 0.65rem 0.85rem;
+    background-color: #f8fafc;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+
+.student-seat-badge {
+    background-color: var(--primary-glow);
+    color: var(--primary);
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}

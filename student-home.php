@@ -167,105 +167,65 @@ if (isset($_SESSION['student_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Seating Arrangements</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .status-active {
-            color: green;
-        }
-
-        .status-pending {
-            color: orange;
-        }
-
-        .status-expired {
-            color: red;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 80px;
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg">
-        <div class="container ">
-            <div class="w-full " style="width: 100%;">
-                <div class="d-flex w-full justify-content-end">
-                    <div class="d-flex">
-                        <!-- Username and Logout Button -->
-                        <span class="navbar-brand"><?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ""; ?></span>
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">Exam Seating Arrangement</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto align-items-center">
+                    <li class="nav-item">
+                        <span class="nav-link text-white mr-3">👤 <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : ""; ?></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#editStudentModal">Account Settings</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="logout-student.php" class="nav-link text-danger">Logout</a>
-
-                    </div>
-                </div>
-                <div class="w-full d-flex" style="position: relative; top: -8px;">
-                    <!-- Navbar Brand and Toggle Button -->
-                    <a class="navbar-brand" href="#">Exam Seating Arrangement</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <!-- Navbar Links -->
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ml-auto">
-                            
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#editStudentModal">Account</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <h2>Incoming Exams</h2>
+    <div class="container mt-5">
+        <h2 class="page-title mb-4">Incoming Exams</h2>
         <div class="row">
             <?php
             if ($incomingExamsResult->num_rows > 0) {
                 while ($examRow = $incomingExamsResult->fetch_assoc()) {
-                    echo "<div class='col-md-6 mb-3'>
-                        <div class='card'>
-                            <div class='card-body'>
-                                <h5 class='card-title'>{$examRow['exam_name']}</h5>
-                                <p class='card-text'>Teacher: {$examRow['teacher_name']}</p>
-                                <p class='card-text'>Date: {$examRow['exam_date']}</p>
-                                <p class='card-text'>Time: {$examRow['start_time']} - {$examRow['end_time']}</p>
-                                ";
-                                $set_number_found = isset($student_seats[$examRow['id']]) ? $student_seats[$examRow['id']] : null;
+                    $set_number_found = isset($student_seats[$examRow['id']]) ? $student_seats[$examRow['id']] : null;
+                    echo "<div class='col-md-6 mb-4'>
+                        <div class='card shadow-sm border-0 h-100'>
+                            <div class='card-body p-4 d-flex flex-column justify-content-between'>
+                                <div>
+                                    <h5 class='card-title mb-3 text-primary'>🎓 " . htmlspecialchars($examRow['exam_name']) . "</h5>
+                                    <p class='card-text mb-2 text-muted'><strong>Teacher:</strong> " . htmlspecialchars($examRow['teacher_name']) . "</p>
+                                    <p class='card-text mb-2 text-muted'><strong>Date:</strong> " . htmlspecialchars($examRow['exam_date']) . "</p>
+                                    <p class='card-text mb-3 text-muted'><strong>Time:</strong> " . htmlspecialchars($examRow['start_time']) . " - " . htmlspecialchars($examRow['end_time']) . "</p>
+                                </div>
+                                <div>";
                                 if ($set_number_found !== null) {
-                                   echo "<p class='card-text'>Your Seat: {$set_number_found}</p>";
+                                   echo "<div class='alert alert-success py-2 px-3 mb-3 d-inline-block'><strong class='text-success'>Your Seat:</strong> <span class='badge bg-success text-white ml-2'>{$set_number_found}</span></div>";
+                                } else {
+                                   echo "
+                                    <form action='' method='POST'>
+                                        <input class='d-none' name='exam_id' value='{$examRow['id']}'>
+                                        <button type='submit' name='book' class='btn btn-primary w-100'>Book Seat</button>
+                                    </form>";
                                 }
-                                ?>
-
-                                <?php
-                                echo "
-                                <form action='' method='POST' >
-                                <input class='d-none' name='exam_id' value='{$examRow['id']}' >
-                                <button type='submit' name='book' class='btn btn-primary'>Book Seat</a>
-                                </form>
+                    echo "      </div>
                             </div>
                         </div>
                     </div>";
                 }
             } else {
-                echo "<div class='col-md-12'>No incoming exams found</div>";
+                echo "<div class='col-md-12'><div class='alert alert-info text-center p-4'>No incoming exams found for your session/year.</div></div>";
             }
             ?>
         </div>

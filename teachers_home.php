@@ -16,41 +16,25 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Home</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 70px;
-
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-
-        .modal-dialog {
-            max-width: 500px;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
     <?php
     include 'teacher_navbar.php';
     ?>
-    <div class="container">
-        <h1>Welcome, <?php echo $_SESSION['username']; ?>!</h1>
-        <p>Here, you can view exam arrangements and manage other aspects of the system.</p>
-        <a href="teacher_exam_arrangements_created.php" class="btn btn-primary">View Exam Arrangements</a>
+    <div class="container mt-5">
+        <div class="card p-5 shadow-sm border-0">
+            <div class="card-body">
+                <span class="badge bg-success text-white mb-3">Teacher Portal</span>
+                <h1 class="page-title mb-3">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+                <p class="text-muted mb-4 fs-5">Here, you can review current exam seating arrangements, assign students, and check seating plans.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="teacher_exam_arrangements_created.php" class="btn btn-primary mr-3">View Seating Plans</a>
+                    <a href="teacher_exam_arrangement.php" class="btn btn-success">Create Seating Plan</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

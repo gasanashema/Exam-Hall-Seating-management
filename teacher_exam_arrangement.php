@@ -76,35 +76,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Seating Arrangement</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 70px;
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
     <?php
     include 'teacher_navbar.php';
     ?>
-
-    <div class="container mb-5">
-        <h4 class="mt-4 font-weight-bold mb-3">Create Exam Seating Arrangement</h4>
+    <div class="container mb-5 mt-5">
+        <div class="card p-5 shadow-sm border-0">
+            <h2 class="page-title mb-4">Create Seating Arrangement</h2>
 
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="examArrangementForm">
             <div class="form-group">
@@ -198,8 +179,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- This div will be populated dynamically based on selected exam rooms -->
             <div id="numStudentsFields"></div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary w-100 py-2">Submit</button>
         </form>
+        </div>
     </div>
 
     <script>

@@ -51,64 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Signup</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .card {
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: #2c3e50;
-            color: white;
-            border-radius: 20px 20px 0 0;
-            font-weight: bold;
-        }
-
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #dcdcdc;
-        }
-
-        .btn-primary {
-            background-color: #2c3e50;
-            border: none;
-            border-radius: 10px;
-        }
-
-        .btn-primary:hover {
-            background-color: #34495e;
-        }
-
-        .alert {
-            border-radius: 10px;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 70px;
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="auth-body">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">Exam Seating Arrangement</a>
+            <a class="navbar-brand text-white" href="#">Exam Seating Arrangement</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -121,29 +70,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a class="nav-link " href="teacher-login.php">Teacher</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-primary" href="student-login.php">Student</a>
+                        <a class="nav-link active" href="student-login.php">Student</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container" style="margin-top: 100px;">
+    <div class="container auth-container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card auth-card">
                     <div class="card-header text-center">
                         <h2>Student Signup</h2>
                     </div>
                     <div class="card-body">
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <input type="text" class="form-control" name="name" placeholder="Name" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <input type="text" class="form-control" name="reg_no" placeholder="Registration Number" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <select class="form-control" name="department_id" required>
                                     <option value="">Select Department</option>
                                     <?php
@@ -155,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     ?>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-4">
                                 <select class="form-control" name="year" required>
                                     <option value="">Select Year</option>
                                     <option value="I">I</option>
@@ -163,23 +112,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <option value="III">III</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Select session:</label><br>
+                            <div class="form-group mb-4">
+                                <label class="text-white-50 font-weight-bold mb-2">Select session:</label><br>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" required type="radio" id="day_session" name="session" value="Day">
-                                    <label class="form-check-label" for="day_session">Day Session</label>
+                                    <label class="form-check-label text-white" for="day_session">Day Session</label>
                                 </div>
-                                <div class="form-check form-check-inline">
+                                <div class="form-check form-check-inline mr-0">
                                     <input class="form-check-input" required type="radio" id="night_session" name="session" value="Night">
-                                    <label class="form-check-label" for="night_session">Night Session</label>
+                                    <label class="form-check-label text-white" for="night_session">Night Session</label>
                                 </div>
                             </div>
-                            <?php if (isset($error)) echo "<div class='alert alert-danger'>$error</div>"; ?>
-                            <button type="submit" class="btn btn-primary btn-block">Signup</button>
+                            <?php if (isset($error)) echo "<div class='alert alert-danger mb-4'>$error</div>"; ?>
+                            <button type="submit" class="btn btn-primary btn-block w-100 mb-3">Signup</button>
                         </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <p>Already have an account? <a href="student-login.php">Login here</a></p>
+                        <div class="text-center mt-3">
+                            <p class="text-white-50 mb-0">Already have an account? <a href="student-login.php" class="text-info font-weight-bold">Login here</a></p>
+                        </div>
                     </div>
                 </div>
             </div>

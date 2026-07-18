@@ -38,43 +38,7 @@ if ($seats_result) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Seating Arrangements</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 80px;
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-
-        .active {
-            font-weight: bold;
-            color: #17a2b8 !important;
-        }
-
-        .status-active {
-            color: green;
-        }
-
-        .status-pending {
-            color: orange;
-        }
-
-        .status-expired {
-            color: red;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -82,66 +46,62 @@ if ($seats_result) {
     include 'admin_navbar.php';
     ?>
 
+    <div class="container mt-5">
+        <h2 class="page-title mb-4">Seating Arrangements</h2>
 
-    <div class="container mt-4">
-        <h2>Your Seating Arrangements</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date Created</th>
+                        <th>Exam Name</th>
+                        <th>Teacher</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            // Calculate status based on exam date, start time, and end time
+                            $status = "Pending";
+                            $current_datetime = date("Y-m-d H:i:s");
+                            $exam_datetime = $row['exam_date'] . " " . $row['start_time'];
 
+                            if ($current_datetime > $exam_datetime) {
+                                $status = "Expired";
+                            } elseif ($current_datetime >= $row['exam_date'] && $current_datetime <= $exam_datetime) {
+                                $status = "Active";
+                            }
 
-        <table class="table mt-3">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Exam Name</th>
-                    <th>Teacher Name</th>
-                    <th>Department Name</th>
-                    <th>Year</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                            // Apply badge based on status
+                            switch ($status) {
+                                case "Active":
+                                    $status_badge = "<span class='badge text-white btn-success'>Active</span>";
+                                    break;
+                                case "Pending":
+                                    $status_badge = "<span class='badge text-white bg-warning btn-warning'>Pending</span>";
+                                    break;
+                                case "Expired":
+                                    $status_badge = "<span class='badge text-white btn-danger'>Expired</span>";
+                                    break;
+                                default:
+                                    $status_badge = "<span class='badge bg-secondary text-white'>Unknown</span>";
+                                    break;
+                            }
 
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        // Calculate status based on exam date, start time, and end time
-                        $status = "Pending";
-                        $current_datetime = date("Y-m-d H:i:s");
-                        $exam_datetime = $row['exam_date'] . " " . $row['start_time'];
-
-                        if ($current_datetime > $exam_datetime) {
-                            $status = "Expired";
-                        } elseif ($current_datetime >= $row['exam_date'] && $current_datetime <= $exam_datetime) {
-                            $status = "Active";
-                        }
-
-                        // Apply CSS class based on status
-                        $status_class = "";
-                        switch ($status) {
-                            case "Active":
-                                $status_class = "status-active";
-                                break;
-                            case "Pending":
-                                $status_class = "status-pending";
-                                break;
-                            case "Expired":
-                                $status_class = "status-expired";
-                                break;
-                            default:
-                                $status_class = "";
-                                break;
-                        }
-
-                        echo "<tr>";
-                        echo "<td>" . $row['created_at'] . "</td>";
-                        echo "<td>" . $row['exam_name'] . "</td>";
-                        echo "<td>" . $row['teacher_name'] . "</td>";
-                        echo "<td>" . $row['department_name'] . "</td>";
-                        echo "<td>" . $row['year'] . "</td>";
-                        echo "<td class='" . $status_class . "'>" . $status . "</td>";
-                        echo "<td>
-                               ";
-                ?>
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
+                            echo "<td><strong>" . htmlspecialchars($row['exam_name']) . "</strong></td>";
+                            echo "<td>" . htmlspecialchars($row['teacher_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['year']) . "</td>";
+                            echo "<td>" . $status_badge . "</td>";
+                            echo "<td>";
+                    ?>
                         <button data-toggle="modal" data-target="#editStudentModal<?php echo $row['id']; ?>" class="btn btn-success">View Sitting Plan</button>
                         <!-- Edit Student Modal -->
                         <div class="modal fade col-lg-12" id="editStudentModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
@@ -229,9 +189,9 @@ if ($seats_result) {
                     echo "<tr><td colspan='6'>No seating arrangements found</td></tr>";
                 }
                 ?>
-            </tbody>
         </table>
     </div>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

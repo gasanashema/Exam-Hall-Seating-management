@@ -24,100 +24,47 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Departments</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 70px;
-
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-
-        .modal-dialog {
-            max-width: 500px;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#">Exam Seating Arrangement</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="home.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-primary" href="departments.php">Departments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="arrangement.php">Seating Arrangement</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="students_list.php">Students</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="created_arrangements.php">Arrangements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="exam_rooms.php">Exam Rooms</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php
+    include "admin_navbar.php";
+    ?>
 
-    <div class="container mt-4">
-        <h2>Departments</h2>
+    <div class="container mt-5">
+        <h2 class="page-title mb-4">Students</h2>
 
-
-        <!-- Display departments in a table -->
-        <table class="table mt-3">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Registration Number</th>
-                    <th>Department</th>
-                    <th>Year</th>
-                    <th>Session</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['name'] . "</td>";
-                        echo "<td>" . $row['reg_no'] . "</td>";
-                        echo "<td>" . $row['department_name'] . "</td>";
-                        echo "<td>" . $row['year'] . "</td>";
-                        echo "<td>" . $row['session'] . "</td>";
-                        
-                        echo "</tr>";
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Registration Number</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Session</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td><strong>" . htmlspecialchars($row['name']) . "</strong></td>";
+                            echo "<td>" . htmlspecialchars($row['reg_no']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['year']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['session']) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='5' class='text-center text-muted'>No Students found</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='4'>No Students found</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal for adding department -->

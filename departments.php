@@ -71,31 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Departments</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f4f4f4;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            height: 70px;
-
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-        }
-
-        .modal-dialog {
-            max-width: 500px;
-        }
-    </style>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -103,41 +79,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    include "admin_navbar.php";
    ?>
 
-    <div class="container mt-4">
-        <h2>Departments</h2>
-        <!-- Button to trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDepartmentModal">Add Department</button>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="page-title mb-0">Departments</h2>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDepartmentModal">Add Department</button>
+        </div>
 
-        <!-- Display departments in a table -->
-        <table class="table mt-3">
-            <thead>
-                <tr>
-                    <th>Department Name</th>
-                    <th>Description</th>
-                    <th>Date of School</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['department_name'] . "</td>";
-                        echo "<td>" . $row['department_description'] . "</td>";
-                        echo "<td>" . $row['date_of_school'] . "</td>";
-                        echo "<td>
-                                <button type='button' class='btn btn-sm btn-primary' data-toggle='modal' data-target='#editDepartmentModal" . $row['id'] . "'>Edit</button>
-                                <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#deleteDepartmentModal" . $row['id'] . "'>Delete</button>
-                              </td>";
-                        echo "</tr>";
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Department Name</th>
+                        <th>Description</th>
+                        <th>Date of School</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td><strong>" . htmlspecialchars($row['department_name']) . "</strong></td>";
+                            echo "<td>" . htmlspecialchars($row['department_description']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['date_of_school']) . "</td>";
+                            echo "<td>
+                                    <button type='button' class='btn btn-sm btn-primary mr-1' data-toggle='modal' data-target='#editDepartmentModal" . $row['id'] . "'>Edit</button>
+                                    <button type='button' class='btn btn-sm btn-danger' data-toggle='modal' data-target='#deleteDepartmentModal" . $row['id'] . "'>Delete</button>
+                                  </td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='4' class='text-center text-muted'>No departments found</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='4'>No departments found</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal for adding department -->
