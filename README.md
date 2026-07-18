@@ -8,9 +8,6 @@ Exam Hall Seating Management System is a clean, responsive PHP and MySQL web app
 
 Here are previews of the modernized user interfaces for different portals and views in the system:
 
-### 🔑 Authentication Portals
-*   **Portal Landing / Login Options**:
-    ![Portal Landing](screenshoots/Screenshot%20from%202026-07-18%2022-57-34.png)
 
 ### 📊 Dashboards & Seating Arrangements
 *   **Admin Seating Management Dashboard**:
